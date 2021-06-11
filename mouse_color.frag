@@ -12,6 +12,6 @@ void main() {
     vec2 mouse = u_mouse.xy/u_resolution;
     float red = mouse.x;
     float green = mouse.y;
-    float blue = pixels.x;
+    float blue = pow(pixels.x, pixels.y);
 	gl_FragColor = vec4(red, green, blue, 1.0);
 }
