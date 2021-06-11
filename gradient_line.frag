@@ -1,35 +1,39 @@
+
 #ifdef GL_ES
 precision mediump float;
 #endif
+
+#define PI 3.14159265359
 
 uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 
-// Plot a line. this funciton returns a float...
-float plot(vec2 st) {    
-    return smoothstep(0.02, 0.0, abs(st.y - st.x));
+float plot(vec2 st, float y_value){
+
+// The other unique function is known as smoothstep().
+// Given a range of two numbers and a value, this function
+// will interpolate the value between the defined range.
+// The two first parameters are for the beginning and end
+// of the transition, while the third is for the value to interpolate.
+  return  smoothstep( y_value-0.02, y_value, st.y) -
+          smoothstep( y_value, y_value+0.02, st.y);
 }
-float getYCoordinate(vec2 st) {
-    // this function is determining the relationship between x and y coordinates for the line.
-    return pow(st.x,1.0);
+
+float getYCoordinate(float x_coor){
+  return x_coor;
+//   return pow(x_coor,0.02);
 }
 
 void main() {
-	vec2 st = gl_FragCoord.xy/u_resolution;
+    vec2 st = gl_FragCoord.xy/u_resolution;
 
-
-    float y = getYCoordinate(st);
+    float y = getYCoordinate(st.x);
 
     vec3 color = vec3(y);
 
-    // Plot a line
-    float pct = plot(st);
-    vec3 line_color = vec3(0.0,1.0,0.0);
-    
-    color = (1.0-pct)*color+pct*line_color;
+    float pct = plot(st,y);
+    color = (1.0-pct)*color+pct*vec3(0.0,1.0,0.0);
 
-    
-    // this gl_FragColor colors both the gradient and the green line
-	gl_FragColor = vec4(color,1.0); 
+    gl_FragColor = vec4(color,1.0);
 }
